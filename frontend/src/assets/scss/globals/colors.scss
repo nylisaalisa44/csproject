@@ -1,0 +1,20 @@
+$black: #020406;
+$white: #ffffff;
+$gray-300: #6d7486;
+$gray-900: #171717;
+$purple: #7558e3;
+
+$outline-15: rgba(#ffffff, 0.15);
+
+$gradient-white: linear-gradient(90deg, #ffffff 0%, #aaaaaa 116.99%);
+$gradient-white-and-purple: linear-gradient(90deg, #ffffff 0%, #7558e3 116.99%);
+$gradient-black-and-purple: linear-gradient(
+  143.54deg,
+  #171717 20.1%,
+  #7558e3 115.04%
+);
+$gradient-uniform-purple: linear-gradient(0deg, #7558e3, #7558e3);
+$gradient-black: linear-gradient(90deg, #171717 8.52%, #000000 100%);
+$gradient-purple: linear-gradient(90deg, #7558e3 0%, #3517af 100%);
+
+$shadow-purple: 0px 0px 20px #7558e3;
