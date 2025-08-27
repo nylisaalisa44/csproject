@@ -1,0 +1,709 @@
+    <!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CS2 Trading - Тест торговой системы</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        .btn {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+            font-size: 14px;
+        }
+        .btn:hover {
+            background: #0056b3;
+        }
+        .btn-secondary {
+            background: #6c757d;
+        }
+        .btn-secondary:hover {
+            background: #545b62;
+        }
+        .btn-success {
+            background: #28a745;
+        }
+        .btn-success:hover {
+            background: #1e7e34;
+        }
+        .btn-warning {
+            background: #ffc107;
+            color: #212529;
+        }
+        .btn-warning:hover {
+            background: #e0a800;
+        }
+        .btn-danger {
+            background: #dc3545;
+        }
+        .btn-danger:hover {
+            background: #c82333;
+        }
+        .response {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            padding: 15px;
+            margin-top: 15px;
+            white-space: pre-wrap;
+            font-family: monospace;
+            font-size: 12px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .form-group {
+            margin: 15px 0;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input, select, textarea {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        .item-list {
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            padding: 10px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .item-card {
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            padding: 10px;
+            margin-bottom: 10px;
+            background: #f8f9fa;
+            cursor: pointer;
+        }
+        .item-card:hover {
+            background: #e9ecef;
+        }
+        .item-card.selected {
+            background: #d4edda;
+            border-color: #28a745;
+        }
+        .item-image {
+            width: 50px;
+            height: 50px;
+            object-fit: contain;
+            border-radius: 4px;
+            margin-right: 10px;
+            float: left;
+        }
+        .item-info {
+            margin-left: 60px;
+        }
+        .item-name {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .item-price {
+            color: #28a745;
+            font-weight: bold;
+        }
+        .trade-summary {
+            background: #e9ecef;
+            padding: 15px;
+            border-radius: 4px;
+            margin-top: 15px;
+        }
+        .status {
+            margin: 20px 0;
+            padding: 15px;
+            border-radius: 5px;
+        }
+        .status.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .status.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .status.info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+        .status.warning {
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+        }
+        .auth-section {
+            background: #fff3cd;
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+        .balance-display {
+            background: #d4edda;
+            padding: 10px;
+            border-radius: 4px;
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        
+        .transactions-container {
+            max-height: 400px;
+            overflow-y: auto;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            padding: 10px;
+            background: #f8f9fa;
+        }
+        
+        .transaction-card {
+            background: white;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            padding: 15px;
+            margin-bottom: 10px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        
+        .transaction-card:hover {
+            box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+        }
+        
+        .transaction-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .transaction-type {
+            font-weight: bold;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            text-transform: uppercase;
+        }
+        
+        .transaction-type.deposit {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .transaction-type.withdrawal {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        .transaction-type.purchase {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+        
+        .transaction-type.sale {
+            background: #fff3cd;
+            color: #856404;
+        }
+        
+        .transaction-status {
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 11px;
+            font-weight: bold;
+        }
+        
+        .transaction-status.pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+        
+        .transaction-status.completed {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .transaction-status.cancelled {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        .transaction-amount {
+            font-size: 18px;
+            font-weight: bold;
+        }
+        
+        .transaction-amount.positive {
+            color: #28a745;
+        }
+        
+        .transaction-amount.negative {
+            color: #dc3545;
+        }
+        
+        .transaction-details {
+            font-size: 12px;
+            color: #6c757d;
+            margin-top: 5px;
+        }
+        
+        .transaction-actions {
+            margin-top: 10px;
+            display: flex;
+            gap: 5px;
+        }
+        
+        .transaction-actions .btn {
+            font-size: 11px;
+            padding: 4px 8px;
+        }
+        
+        .items-selection {
+            margin-bottom: 20px;
+        }
+        
+        .items-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 10px;
+            max-height: 300px;
+            overflow-y: auto;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            padding: 10px;
+            background: #f8f9fa;
+            margin-bottom: 10px;
+        }
+        
+        .item-card {
+            background: white;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            padding: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+        }
+        
+        .item-card:hover {
+            border-color: #007bff;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .item-card.selected {
+            border-color: #28a745;
+            background: #d4edda;
+        }
+        
+        .item-image {
+            width: 60px;
+            height: 60px;
+            object-fit: contain;
+            border-radius: 4px;
+            margin-right: 10px;
+            float: left;
+        }
+        
+        .item-info {
+            margin-left: 70px;
+        }
+        
+        .item-name {
+            font-weight: bold;
+            font-size: 12px;
+            margin-bottom: 5px;
+            line-height: 1.2;
+        }
+        
+        .item-price {
+            color: #28a745;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        
+        .item-rarity {
+            font-size: 10px;
+            color: #6c757d;
+            margin-top: 2px;
+        }
+        
+        .selected-items {
+            margin-top: 20px;
+        }
+        
+        .selected-items h4 {
+            margin-bottom: 10px;
+            color: #495057;
+        }
+        
+        .selected-items-list {
+            max-height: 200px;
+            overflow-y: auto;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            padding: 10px;
+            background: #f8f9fa;
+        }
+        
+        .selected-item {
+            background: white;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            padding: 8px;
+            margin-bottom: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .selected-item:last-child {
+            margin-bottom: 0;
+        }
+        
+        .selected-item-info {
+            display: flex;
+            align-items: center;
+            flex: 1;
+        }
+        
+        .selected-item-remove {
+            background: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            padding: 2px 6px;
+            font-size: 10px;
+            cursor: pointer;
+        }
+        
+        .selected-item-remove:hover {
+            background: #c82333;
+        }
+        
+        .trade-summary {
+            background: #e9ecef;
+            padding: 10px;
+            border-radius: 4px;
+            margin-top: 10px;
+            text-align: center;
+            font-size: 16px;
+        }
+        
+        .trade-details {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            padding: 10px;
+            margin-top: 10px;
+        }
+        
+        .trade-items-list {
+            max-height: 150px;
+            overflow-y: auto;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            padding: 5px;
+            background: white;
+            margin-top: 5px;
+        }
+        
+        .trade-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 5px;
+            border-bottom: 1px solid #eee;
+            font-size: 12px;
+        }
+        
+        .trade-item:last-child {
+            border-bottom: none;
+        }
+        
+        .trade-actions {
+            display: flex;
+            gap: 5px;
+            margin-top: 10px;
+        }
+        
+        .trade-actions .btn {
+            font-size: 11px;
+            padding: 4px 8px;
+        }
+        
+        .status.processing {
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+        }
+    </style>
+</head>
+<body>
+    <h1>🎮 CS2 Trading Platform - Тест торговой системы</h1>
+    
+    <div class="auth-section">
+        <h3>🔐 Статус авторизации</h3>
+        <div id="auth-status" class="status info">
+            Проверка авторизации...
+        </div>
+        <button class="btn btn-success" id="login-btn">Войти через Steam</button>
+        <button class="btn btn-secondary" id="logout-btn">Выйти</button>
+        <div id="balance-display" class="balance-display" style="display: none;">
+            Баланс: $<span id="balance-amount">0.00</span>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>💰 Транзакции</h2>
+        <div class="grid">
+            <div>
+                <h3>Пополнение баланса</h3>
+                <div class="form-group">
+                    <label for="deposit-amount">Сумма:</label>
+                    <input type="number" id="deposit-amount" placeholder="100" step="0.01" min="0">
+                </div>
+                <div class="form-group">
+                    <label for="deposit-currency">Валюта:</label>
+                    <select id="deposit-currency">
+                        <option value="USD">USD</option>
+                        <option value="EUR">EUR</option>
+                        <option value="RUB">RUB</option>
+                        <option value="CRYPTO">CRYPTO</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="deposit-crypto-address">Crypto адрес (опционально):</label>
+                    <input type="text" id="deposit-crypto-address" placeholder="0x...">
+                </div>
+                <button class="btn btn-success" id="create-deposit-btn">Создать пополнение</button>
+            </div>
+            <div>
+                <h3>Вывод средств</h3>
+                <div class="form-group">
+                    <label for="withdrawal-amount">Сумма:</label>
+                    <input type="number" id="withdrawal-amount" placeholder="50" step="0.01" min="0">
+                </div>
+                <div class="form-group">
+                    <label for="withdrawal-currency">Валюта:</label>
+                    <select id="withdrawal-currency">
+                        <option value="USD">USD</option>
+                        <option value="EUR">EUR</option>
+                        <option value="RUB">RUB</option>
+                        <option value="CRYPTO">CRYPTO</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="withdrawal-crypto-address">Crypto адрес:</label>
+                    <input type="text" id="withdrawal-crypto-address" placeholder="0x...">
+                </div>
+                <button class="btn btn-warning" id="create-withdrawal-btn">Создать вывод</button>
+            </div>
+        </div>
+        <button class="btn btn-secondary" id="get-transactions-btn">🔄 Обновить историю транзакций</button>
+        <button class="btn btn-secondary" id="get-balance-btn">🔄 Обновить баланс</button>
+        <button class="btn btn-success" id="quick-deposit-btn">💰 Быстрое пополнение $10</button>
+        <div class="status info" style="margin-top: 10px;">
+            💡 Данные загружаются автоматически при открытии страницы
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>🔄 Трейды</h2>
+        <div class="grid">
+            <div>
+                <h3>Расчет стоимости трейда</h3>
+                <div class="form-group">
+                    <label for="trade-type">Тип трейда:</label>
+                    <select id="trade-type">
+                        <option value="buy">Покупка</option>
+                        <option value="sell">Продажа</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Выбор предметов:</label>
+                    <div class="items-selection">
+                        <div class="items-grid" id="available-items">
+                            <div class="status info">Загрузка предметов...</div>
+                        </div>
+                        <button class="btn btn-secondary" id="load-items-btn">🔄 Обновить предметы</button>
+                    </div>
+                </div>
+                <div class="selected-items" id="selected-items-display">
+                    <h4>Выбранные предметы:</h4>
+                    <div id="selected-items-list" class="selected-items-list">
+                        <div class="status info">Предметы не выбраны</div>
+                    </div>
+                    <div class="trade-summary" id="trade-summary" style="display: none;">
+                        <strong>Общая стоимость: $<span id="total-amount">0.00</span></strong>
+                    </div>
+                </div>
+                <button class="btn btn-success" id="calculate-trade-btn">Рассчитать стоимость</button>
+            </div>
+            <div>
+                <h3>Создание трейда</h3>
+                <div class="form-group">
+                    <label for="create-trade-type">Тип трейда:</label>
+                    <select id="create-trade-type">
+                        <option value="buy">Покупка</option>
+                        <option value="sell">Продажа</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Выбранные предметы для трейда:</label>
+                    <div id="trade-items-display" class="selected-items-list">
+                        <div class="status info">Сначала выберите предметы слева</div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="create-trade-amount">Общая сумма:</label>
+                    <input type="number" id="create-trade-amount" placeholder="0.00" step="0.01" min="0" readonly>
+                </div>
+                <button class="btn btn-success" id="create-trade-btn">Создать трейд</button>
+            </div>
+        </div>
+        <button class="btn btn-secondary" id="get-trades-btn">🔄 Обновить мои трейды</button>
+        <div class="status info" style="margin-top: 10px;">
+            💡 Предметы и трейды загружаются автоматически при открытии страницы
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>🤖 Боты</h2>
+        <div class="grid">
+            <div>
+                <h3>Управление ботами</h3>
+                <button class="btn btn-success" id="get-bots-btn">🔄 Обновить активных ботов</button>
+                <button class="btn btn-secondary" id="get-bot-inventory-btn">Получить инвентарь бота</button>
+                <div class="form-group">
+                    <label for="bot-id">ID бота:</label>
+                    <input type="text" id="bot-id" placeholder="bot_id">
+                </div>
+            </div>
+            <div>
+                <h3>Steam трейды</h3>
+                <div class="form-group">
+                    <label for="steam-trade-id">ID трейда:</label>
+                    <input type="text" id="steam-trade-id" placeholder="trade_id">
+                </div>
+                <div class="form-group">
+                    <label for="steam-bot-id">ID бота:</label>
+                    <input type="text" id="steam-bot-id" placeholder="bot_id">
+                </div>
+                <button class="btn btn-success" id="create-steam-trade-btn">Создать Steam трейд</button>
+                <button class="btn btn-secondary" id="check-trade-status-btn">Проверить статус трейда</button>
+            </div>
+        </div>
+        <div class="status info" style="margin-top: 10px;">
+            💡 Список ботов загружается автоматически при открытии страницы
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>📊 Статистика</h2>
+        <div class="grid">
+            <div>
+                <h3>Мои трейды</h3>
+                <div id="trades-stats" class="status info">
+                    Загрузка статистики трейдов...
+                </div>
+            </div>
+            <div>
+                <h3>Мои транзакции</h3>
+                <div id="transactions-stats" class="status info">
+                    Загрузка статистики транзакций...
+                </div>
+            </div>
+        </div>
+        <div class="status info" style="margin-top: 10px;">
+            💡 Статистика загружается автоматически при открытии страницы
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>🔧 Управление транзакциями</h2>
+        <div class="grid">
+            <div>
+                <h3>История транзакций</h3>
+                <div id="transactions-list" class="transactions-container">
+                    <div class="status info">Загрузка транзакций...</div>
+                </div>
+                <button class="btn btn-secondary" id="load-transactions-btn">🔄 Обновить транзакции</button>
+            </div>
+            <div>
+                <h3>Управление статусами</h3>
+                <div class="form-group">
+                    <label for="transaction-id">ID транзакции:</label>
+                    <input type="text" id="transaction-id" placeholder="transaction_id">
+                </div>
+                <button class="btn btn-success" id="complete-transaction-btn">✅ Завершить транзакцию</button>
+                <button class="btn btn-danger" id="cancel-transaction-btn">❌ Отменить транзакцию</button>
+            </div>
+        </div>
+        <div class="status info" style="margin-top: 10px;">
+            💡 История транзакций загружается автоматически при открытии страницы
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>🎯 Управление трейдами</h2>
+        <div class="grid">
+            <div>
+                <h3>Активные трейды</h3>
+                <div id="trades-management-list" class="transactions-container">
+                    <div class="status info">Загрузка трейдов...</div>
+                </div>
+                <button class="btn btn-secondary" id="load-trades-management-btn">🔄 Обновить трейды</button>
+            </div>
+            <div>
+                <h3>Управление трейдами</h3>
+                <div class="form-group">
+                    <label for="trade-id">ID трейда:</label>
+                    <input type="text" id="trade-id" placeholder="trade_id">
+                </div>
+                <button class="btn btn-success" id="complete-trade-btn">✅ Завершить трейд</button>
+                <button class="btn btn-warning" id="process-trade-btn">🔄 В обработку</button>
+                <button class="btn btn-danger" id="cancel-trade-btn">❌ Отменить трейд</button>
+            </div>
+        </div>
+        <div class="status info" style="margin-top: 10px;">
+            💡 Активные трейды загружаются автоматически при открытии страницы
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>📄 Ответ API</h2>
+        <div id="response" class="response">Нажмите любую кнопку для получения данных...</div>
+    </div>
+
+    <script src="test-trading.js"></script>
+</body>
+</html>
