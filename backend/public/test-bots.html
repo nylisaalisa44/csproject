@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CS2 Trading - Тест управления ботами</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        .btn {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+            font-size: 14px;
+        }
+        .btn:hover {
+            background: #0056b3;
+        }
+        .btn-success {
+            background: #28a745;
+        }
+        .btn-success:hover {
+            background: #1e7e34;
+        }
+        .btn-warning {
+            background: #ffc107;
+            color: #212529;
+        }
+        .btn-warning:hover {
+            background: #e0a800;
+        }
+        .btn-danger {
+            background: #dc3545;
+        }
+        .btn-danger:hover {
+            background: #c82333;
+        }
+        .btn-secondary {
+            background: #6c757d;
+        }
+        .btn-secondary:hover {
+            background: #545b62;
+        }
+        .btn-info {
+            background: #17a2b8;
+        }
+        .btn-info:hover {
+            background: #138496;
+        }
+        .btn-primary {
+            background: #007bff;
+        }
+        .btn-primary:hover {
+            background: #0056b3;
+        }
+        .response {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            padding: 15px;
+            margin-top: 15px;
+            white-space: pre-wrap;
+            font-family: monospace;
+            font-size: 12px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        .status {
+            margin: 20px 0;
+            padding: 15px;
+            border-radius: 5px;
+        }
+        .status.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .status.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .status.info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+        .status.warning {
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+        }
+        .bot-card {
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            background: #f8f9fa;
+        }
+        .bot-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .bot-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin-right: 15px;
+        }
+        .bot-info h3 {
+            margin: 0 0 5px 0;
+            color: #333;
+        }
+        .bot-info p {
+            margin: 2px 0;
+            color: #666;
+            font-size: 14px;
+        }
+        .bot-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        .stat {
+            text-align: center;
+            padding: 10px;
+            background: white;
+            border-radius: 4px;
+            border: 1px solid #dee2e6;
+        }
+        .stat .label {
+            font-size: 12px;
+            color: #666;
+            display: block;
+        }
+        .stat .value {
+            font-size: 16px;
+            font-weight: bold;
+            color: #333;
+        }
+        .bot-actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .bot-actions .btn {
+            font-size: 12px;
+            padding: 6px 12px;
+        }
+        .status.online {
+            background: #d4edda;
+            color: #155724;
+        }
+        .status.offline {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        .status.syncing {
+            background: #fff3cd;
+            color: #856404;
+        }
+        .status.error {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        .sync-service-status {
+            background: #e9ecef;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        .sync-service-controls {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .status-indicator .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+        .status-indicator.running .dot {
+            background: #28a745;
+        }
+        .status-indicator.stopped .dot {
+            background: #dc3545;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #dee2e6;
+            text-align: center;
+        }
+        .stat-card h3 {
+            margin: 0 0 10px 0;
+            color: #333;
+            font-size: 16px;
+        }
+        .stat-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #007bff;
+        }
+        .health-summary {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .health-item {
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        .health-item.healthy {
+            background: #d4edda;
+            color: #155724;
+        }
+        .health-item.problematic {
+            background: #fff3cd;
+            color: #856404;
+        }
+        .health-item.offline {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        .health-item.error {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        .health-item .label {
+            font-size: 12px;
+            display: block;
+        }
+        .health-item .value {
+            font-size: 20px;
+            font-weight: bold;
+        }
+        .health-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 15px;
+        }
+        .health-bot {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #dee2e6;
+        }
+        .health-bot.healthy {
+            border-left: 4px solid #28a745;
+        }
+        .health-bot.problematic {
+            border-left: 4px solid #ffc107;
+        }
+        .health-bot.offline {
+            border-left: 4px solid #dc3545;
+        }
+        .health-bot.error {
+            border-left: 4px solid #dc3545;
+        }
+        .health-bot h4 {
+            margin: 0 0 10px 0;
+            color: #333;
+        }
+        .health-bot p {
+            margin: 5px 0;
+            color: #666;
+            font-size: 14px;
+        }
+        .issues {
+            margin-top: 10px;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 4px;
+        }
+        .issues ul {
+            margin: 5px 0;
+            padding-left: 20px;
+        }
+        .issues li {
+            color: #721c24;
+            font-size: 12px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #333;
+        }
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        .message {
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .message.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .message.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .message.loading {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+        .spinner {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #f3f3f3;
+            border-top: 2px solid #007bff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+        .modal-content {
+            background-color: white;
+            margin: 5% auto;
+            padding: 20px;
+            border-radius: 8px;
+            width: 80%;
+            max-width: 800px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        .close-modal {
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            color: #aaa;
+        }
+        .close-modal:hover {
+            color: #000;
+        }
+        .inventory-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .inventory-item {
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 15px;
+            background: #f8f9fa;
+        }
+        .item-icon {
+            width: 64px;
+            height: 64px;
+            margin-right: 15px;
+            float: left;
+        }
+        .item-info h4 {
+            margin: 0 0 10px 0;
+            color: #333;
+        }
+        .item-info p {
+            margin: 5px 0;
+            color: #666;
+            font-size: 12px;
+        }
+        .twofa-input {
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-family: monospace;
+            text-align: center;
+            letter-spacing: 2px;
+        }
+        .twofa-input:focus {
+            outline: none;
+            border-color: #007bff;
+            box-shadow: 0 0 0 2px rgba(0,123,255,0.25);
+        }
+        .login-section {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+    </style>
+</head>
+<body>
+    <h1>🤖 CS2 Trading Platform - Тест управления ботами</h1>
+    
+    <div class="sync-service-status">
+        <h3>🔄 Сервис синхронизации</h3>
+        <div id="service-status">
+            <p>Статус: <span>Проверка...</span></p>
+        </div>
+        <div class="sync-service-controls">
+            <button class="btn btn-success" data-action="start-service">Запустить</button>
+            <button class="btn btn-danger" data-action="stop-service">Остановить</button>
+            <button class="btn btn-warning" data-action="restart-service">Перезапустить</button>
+            <button class="btn btn-secondary" data-action="force-sync">Принудительная синхронизация</button>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>📊 Статистика ботов</h2>
+        <button class="btn btn-secondary" data-action="load-stats">Получить статистику</button>
+        <button class="btn btn-secondary" data-action="load-health">Проверить здоровье</button>
+        <div id="stats-container">
+            <div class="status info">Нажмите "Получить статистику" для отображения</div>
+        </div>
+        <div id="health-container">
+            <div class="status info">Нажмите "Проверить здоровье" для отображения</div>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>🤖 Список ботов</h2>
+        <button class="btn btn-secondary" data-action="load-bots">Загрузить ботов</button>
+        <button class="btn btn-success" data-action="force-sync">Синхронизировать всех</button>
+        <div id="bots-list">
+            <div class="status info">Нажмите "Загрузить ботов" для отображения</div>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>🎯 Создание тестового бота</h2>
+        <form id="create-bot-form">
+            <div class="grid">
+                <div>
+                    <div class="form-group">
+                        <label for="steamId">Steam ID:</label>
+                        <input type="text" id="steamId" name="steamId" placeholder="76561198037414410" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="displayName">Имя бота:</label>
+                        <input type="text" id="displayName" name="displayName" placeholder="Test Bot" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="steamUsername">Steam Username:</label>
+                        <input type="text" id="steamUsername" name="steamUsername" placeholder="username" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="steamPassword">Steam Password:</label>
+                        <input type="password" id="steamPassword" name="steamPassword" placeholder="password" required>
+                    </div>
+                </div>
+                <div>
+                    <div class="form-group">
+                        <label for="steamGuardCode">Steam Guard Code (если включен):</label>
+                        <input type="text" id="steamGuardCode" name="steamGuardCode" placeholder="123456">
+                    </div>
+                    <div class="form-group">
+                        <label for="tradeUrl">Trade URL:</label>
+                        <input type="text" id="tradeUrl" name="tradeUrl" placeholder="https://steamcommunity.com/tradeoffer/new/?partner=..." required>
+                    </div>
+                    <div class="form-group">
+                        <label for="avatar">Аватар (URL):</label>
+                        <input type="text" id="avatar" name="avatar" placeholder="https://via.placeholder.com/150">
+                    </div>
+                    <button type="submit" class="btn btn-success">Создать тестового бота</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="container">
+        <h2>📄 Ответ API</h2>
+        <div id="response" class="response">Нажмите любую кнопку для получения данных...</div>
+    </div>
+
+    <!-- Модальное окно для инвентаря -->
+    <div id="inventory-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <div id="inventory-content">
+                <!-- Содержимое инвентаря будет загружено динамически -->
+            </div>
+        </div>
+    </div>
+
+    <script src="test-bots.js"></script>
+</body>
+</html>
