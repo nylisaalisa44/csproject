@@ -7,6 +7,7 @@ import { computed, defineAsyncComponent, shallowRef, watch } from 'vue'
 
 const SIZE = {
   '16': 'size-16',
+  '20': 'size-20',
   '24': 'size-24',
   '32': 'size-32',
   '45': 'size-45',
@@ -36,6 +37,11 @@ const classObject = computed(() => [SIZE[size]])
   &.size-16 {
     width: 16px;
     height: 16px;
+  }
+
+  &.size-20 {
+    width: 20px;
+    height: 20px;
   }
 
   &.size-24 {

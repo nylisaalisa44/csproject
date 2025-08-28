@@ -2,14 +2,21 @@
   <header class="header" :class="{ 'menu-open': menu.isOpened }">
     <div class="container header__wrapper">
       <div class="header__buttons">
-        <Button>Продажа / обмен</Button>
+        <Button to="/trade">Продажа / обмен</Button>
         <Button>Поддержка</Button>
       </div>
       <router-link to="/"><Logo class="header__logo" /></router-link>
       <div class="header__buttons">
         <Button>ru</Button>
         <Button>$ USD</Button>
-        <Button variant="purple">Войти через Steam</Button>
+        <Button v-if="!isLoggedIn" variant="purple">Войти через Steam</Button>
+        <router-link to="/profile/me">
+          <img
+            class="header__avatar"
+            src="https://i.pravatar.cc/300"
+            alt="Avatar"
+          />
+        </router-link>
       </div>
       <IconButton
         @click="menu.toggle()"
@@ -35,8 +42,10 @@ import IconButton from '@/components/UI/IconButton.vue'
 import HeaderMenu from '@/components/Header/HeaderMenu.vue'
 import { useMenuStore } from '@/stores/menu.ts'
 import Icon from '@/components/UI/Icon.vue'
+import { ref } from 'vue'
 
 const menu = useMenuStore()
+const isLoggedIn = ref(true)
 </script>
 
 <style lang="scss" scoped>
@@ -89,6 +98,14 @@ $headerHeight: 80px;
     @include media(mobile) {
       display: flex;
     }
+  }
+
+  &__avatar {
+    width: 40px;
+    height: 40px;
+    background-size: cover;
+    background-position: top center;
+    border-radius: 50%;
   }
 }
 

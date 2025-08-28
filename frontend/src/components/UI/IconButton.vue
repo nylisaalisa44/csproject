@@ -1,15 +1,13 @@
 <template>
-  <Button :variant="variant" padding="xs">
+  <Button :padding="padding" v-bind="rest">
     <slot />
   </Button>
 </template>
 
 <script lang="ts" setup>
-import Button, { type ButtonVariant } from '@/components/UI/Button.vue'
+import Button, { type ButtonProps } from '@/components/UI/Button.vue'
 
-defineProps<{
-  variant?: ButtonVariant
-}>()
+const { padding = 'xs', ...rest } = defineProps<ButtonProps>()
 </script>
 
 <style lang="scss" scoped></style>

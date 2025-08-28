@@ -3,7 +3,7 @@
     <div class="item__content">
       <div v-show="item.tradeban" class="item__tradeban">
         <Icon class="item__tradeban-icon" name="lock-closed" />
-        <div class="item__tradeban-text">0 дн</div>
+        <div class="item__tradeban-text">{{ tradebanDays }} дн</div>
       </div>
       <div class="item__info">
         <div class="item__description">{{ item.description }}</div>
@@ -19,8 +19,9 @@ import Icon from '@/components/UI/Icon.vue'
 import { computed } from 'vue'
 
 export type ItemObject = {
+  id: number
   tradeban: boolean
-  // tradebanExpires?: Date
+  tradebanExpires?: number
   description: string
   price: string
   imageUrl: string
@@ -28,16 +29,16 @@ export type ItemObject = {
 const props = defineProps<{
   item: ItemObject
 }>()
-// const tradebanDays = computed(() => {
-//   if (!props.item.tradeban) return 0
-//
-//   const now = new Date()
-//   const target = props.item.tradebanExpires
-//   const diff = target.getTime() - now.getTime()
-//   const oneDay = 1000 * 60 * 60 * 24
-//   const daysRemaining = Math.ceil(diff / oneDay)
-//   return daysRemaining
-// })
+const tradebanDays = computed(() => {
+  if (!props.item.tradebanExpires) return 0
+
+  const now = new Date()
+  const target = new Date(props.item.tradebanExpires)
+  const diff = target.getTime() - now.getTime()
+  const oneDay = 1000 * 60 * 60 * 24
+  const daysRemaining = Math.ceil(diff / oneDay)
+  return daysRemaining
+})
 </script>
 
 <style lang="scss" scoped>
@@ -49,6 +50,12 @@ const props = defineProps<{
   position: relative;
   width: 130px;
   height: 130px;
+
+  @include media(tablet) {
+    width: 110px;
+    height: 110px;
+    border-radius: 15px;
+  }
 
   &__content {
     @include flex-container(column, normal, space-between);
@@ -74,6 +81,10 @@ const props = defineProps<{
   &__tradeban-text {
     color: $gray-300;
     font: $font-body-12;
+
+    @include media(tablet) {
+      font: $font-body-10;
+    }
   }
 
   &__tradeban-icon {
@@ -85,16 +96,25 @@ const props = defineProps<{
   &__info {
     @include flex(column);
     gap: 6px;
+    margin-top: auto;
   }
 
   &__description {
     color: $gray-300;
     font: $font-body-12;
+
+    @include media(tablet) {
+      font: $font-body-10;
+    }
   }
 
   &__price {
     font: $font-body-16;
     color: $white;
+
+    @include media(tablet) {
+      font: $font-body-14;
+    }
   }
 }
 </style>

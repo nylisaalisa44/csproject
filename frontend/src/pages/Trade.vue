@@ -1,21 +1,84 @@
 <template>
-  <div class="container">
-    <ItemGrid />
-    <Item v-for="(item, idx) in TEST_ITEMS" :key="idx" :item="item" />
+  <div v-if="dt != 'mobile'" class="container trade">
+    <TradeGive />
+    <TradeFilters />
+    <TradeReceive />
+  </div>
+  <div class="container trade-mobile" v-else>
+    <div class="trade-mobile__select">
+      <Button
+        :variant="tab == 'inventory' ? 'purple' : 'dark'"
+        preset="sm"
+        @click="tab = 'inventory'"
+        grow
+        >Инвентарь</Button
+      >
+      <Button
+        :variant="tab == 'shop' ? 'purple' : 'dark'"
+        @click="tab = 'shop'"
+        preset="sm"
+        grow
+        >Покупка</Button
+      >
+    </div>
+    <Button class="trade-mobile__submit" preset="sm" variant="purple"
+      >Обменять предметы</Button
+    >
+    <TradeGive v-show="tab == 'inventory'" />
+    <TradeReceive v-show="tab == 'shop'" />
+    <TradeFilters v-show="filters.isOpened" class="trade-mobile__filters" />
   </div>
 </template>
 
 <script lang="ts" setup>
-import ItemGrid from '@/components/Trade/ItemGrid.vue'
-import Item, { type ItemObject } from '@/components/UI/Item.vue'
+import TradeGive from '@/components/Trade/TradeGive.vue'
+import TradeFilters from '@/components/Trade/TradeFilters.vue'
+import TradeReceive from '@/components/Trade/TradeReceive.vue'
+import { useDeviceType } from '@/composables/useDeviceType.ts'
+import { ref } from 'vue'
+import Button from '@/components/UI/Button.vue'
+import { useFiltersStore } from '@/stores/filters.ts'
 
-const TEST_ITEMS: ItemObject[] = [
-  {
-    imageUrl: '@/assets/images/test-item.webp',
-    price: '1337 $',
-    description: 'Description',
-    tradeban: true,
-    // tradebanExpires: new Date().setDate(new Date().getDate() + 5),
-  },
-]
+const dt = useDeviceType()
+const tab = ref<'inventory' | 'shop'>('shop')
+const filters = useFiltersStore()
 </script>
+
+<style lang="scss" scoped>
+.trade {
+  display: grid;
+  grid-template-columns: 1fr 310px 1fr;
+
+  @include media(tablet) {
+    grid-template-columns: 1fr 264px 1fr;
+  }
+}
+
+.trade-mobile {
+  @include flex(column);
+  padding: 16px 0 16px 0;
+  position: relative;
+
+  &__submit {
+    margin-top: 16px;
+  }
+
+  &__filters {
+    --header-height: 80px;
+    width: 100%;
+    height: calc(100dvh - var(--header-height));
+    overflow: scroll;
+    position: fixed;
+    top: var(--header-height);
+    left: 0;
+    background-color: $black;
+    z-index: $z-index-filters;
+  }
+
+  &__select {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+  }
+}
+</style>

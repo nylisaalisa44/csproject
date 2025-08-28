@@ -1,9 +1,9 @@
 <template>
-  <button class="button" :class="classObject">
+  <component :is="componentType" :to="to" class="button" :class="classObject">
     <Icon v-if="iconLeft" :name="iconLeft" />
     <slot />
     <Icon v-if="iconRight" :name="iconRight" />
-  </button>
+  </component>
 </template>
 
 <script lang="ts" setup>
@@ -66,14 +66,7 @@ const PRESET: Record<'sm' | 'md' | 'lg', ClassObject> = {
 }
 export type ButtonPreset = keyof typeof PRESET
 
-const {
-  padding = 'sm',
-  variant = 'dark',
-  text = 'sm',
-  radius = 'md',
-  preset,
-  grow = false,
-} = defineProps<{
+export type ButtonProps = {
   grow?: boolean
   padding?: ButtonPadding
   variant?: ButtonVariant
@@ -82,7 +75,19 @@ const {
   preset?: ButtonPreset
   iconLeft?: string
   iconRight?: string
-}>()
+  to?: string
+}
+const {
+  padding = 'sm',
+  variant = 'dark',
+  text = 'sm',
+  radius = 'md',
+  preset,
+  grow = false,
+  to,
+} = defineProps<ButtonProps>()
+
+const componentType = to ? 'router-link' : 'button'
 
 const classObject = computed(() => {
   const p = preset ? PRESET[preset].padding : padding
@@ -112,6 +117,14 @@ const classObject = computed(() => {
     background $transition-base,
     background-color $transition-base,
     box-shadow $transition-base;
+  text-decoration: none;
+
+  &:not(.variant-invisible):hover {
+    border: 1px solid $outline-15;
+    background: $gradient-purple;
+    box-shadow: $shadow-purple;
+    background-origin: border-box;
+  }
 
   &.radius-md {
     border-radius: 25px;
@@ -178,13 +191,6 @@ const classObject = computed(() => {
 
   &.text-lg {
     font: $font-h2-20;
-  }
-
-  &:hover {
-    border: 1px solid $outline-15;
-    background: $gradient-purple;
-    box-shadow: $shadow-purple;
-    background-origin: border-box;
   }
 }
 </style>
