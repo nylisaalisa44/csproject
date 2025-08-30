@@ -5,6 +5,7 @@ import ProfileLayout from '@/pages/profile/Layout.vue'
 import ProfileMe from '@/pages/profile/Me.vue'
 import ProfileReferral from '@/pages/profile/Referral.vue'
 import ProfileTransactions from '@/pages/profile/Transactions.vue'
+import ProfileSecurity from '@/pages/profile/Security.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -38,6 +39,11 @@ const router = createRouter({
           path: 'transactions',
           name: 'transactions',
           component: ProfileTransactions,
+        },
+        {
+          path: 'security',
+          name: 'security',
+          component: ProfileSecurity,
         },
       ],
     },

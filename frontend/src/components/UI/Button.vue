@@ -26,6 +26,7 @@ const VARIANT = {
   transparent: 'variant-transparent',
   dark: 'variant-dark',
   purple: 'variant-purple',
+  red: 'variant-red',
 }
 export type ButtonVariant = keyof typeof VARIANT
 
@@ -119,7 +120,7 @@ const classObject = computed(() => {
     box-shadow $transition-base;
   text-decoration: none;
 
-  &:not(.variant-invisible):hover {
+  &:not(.variant-invisible, .variant-red):hover {
     border: 1px solid $outline-15;
     background: $gradient-purple;
     box-shadow: $shadow-purple;
@@ -175,6 +176,11 @@ const classObject = computed(() => {
   &.variant-purple {
     color: $white;
     background-color: $purple;
+  }
+
+  &.variant-red {
+    color: $secondary-red;
+    background-color: $red;
   }
 
   &.grow {
