@@ -4,6 +4,7 @@ import Trade from '@/pages/Trade.vue'
 import ProfileLayout from '@/pages/profile/Layout.vue'
 import ProfileMe from '@/pages/profile/Me.vue'
 import ProfileReferral from '@/pages/profile/Referral.vue'
+import ProfileTransactions from '@/pages/profile/Transactions.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -32,6 +33,11 @@ const router = createRouter({
           path: 'referral',
           name: 'referral',
           component: ProfileReferral,
+        },
+        {
+          path: 'transactions',
+          name: 'transactions',
+          component: ProfileTransactions,
         },
       ],
     },

@@ -19,7 +19,7 @@
 # Editor directories and files
 /frontend/.vscode/*
 /frontend/!.vscode/extensions.json
-/frontend/.idea
+.idea
 /frontend/*.suo
 /frontend/*.ntvs*
 /frontend/*.njsproj
